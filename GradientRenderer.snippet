@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- <?xml ?>の下は1行空けないと読み込めない -->
+<CodeSnippets xmlns="http://schema.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <!-- Titleのみ必須 -->
+            <Title>GradientRenderer</Title>
+            <Author>Shuhei Nishizawa</Author>
+            <Description>Create gradient background color custom renderer.</Description>
+            <!-- 呼び出すときの名前 -->
+            <Shortcut>gradren</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+					<ID>control</ID>
+					<ToolTip>Control Name</ToolTip>
+					<Default>MyControl</Default>
+				</Literal>
+                <Literal>
+					<ID>start_x</ID>
+					<ToolTip>Gradient start X position</ToolTip>
+					<Default>0</Default>
+				</Literal>
+                <Literal>
+					<ID>start_y</ID>
+					<ToolTip>Gradient start Y position</ToolTip>
+					<Default>0</Default>
+				</Literal>  
+                <Literal>
+					<ID>end_x</ID>
+					<ToolTip>Gradient end X position</ToolTip>
+					<Default>Width</Default>
+				</Literal>  
+                <Literal>
+					<ID>end_y</ID>
+					<ToolTip>Gradient end Y position</ToolTip>
+					<Default>Height</Default>
+				</Literal>                                            
+                <Literal>
+					<ID>start_color</ID>
+					<ToolTip>Color property name for gradient start color</ToolTip>
+					<Default>StartColor</Default>
+				</Literal>
+                <Literal>
+					<ID>end_color</ID>
+					<ToolTip>Color property name for gradient end color</ToolTip>
+					<Default>EndColor</Default>
+				</Literal>
+            </Declarations>
+            <!-- 言語を指定.C#の場合は"CSharp" -->
+            <Code Language="CSharp">
+                <![CDATA[
+    public class $control$Renderer : VisualElementRenderer<$control$>
+    {
+        public $control$Renderer(Context context) : base(context)
+        {
+        }
+
+        protected override void DispatchDraw(Canvas canvas)
+        {
+            //X軸始点
+            //Y軸始点
+            //X軸終点
+            //Y軸終点
+            //開始色
+            //終了色
+            //範囲外の描画方法
+            LinearGradient gradient = new LinearGradient
+                (
+                    x0: $start_x$,
+                    y0: $start_y$,
+                    x1: $end_x$,
+                    y1: $end_y$,
+                    color0: Element.$start_color$.ToAndroid(),
+                    color1: Element.$end_color$.ToAndroid(),
+                    tile: Shader.TileMode.Clamp
+                );
+
+            Paint paint = new Paint
+            {
+                Dither = true,
+            };
+            paint.SetShader(gradient);
+            canvas.DrawPaint(paint);
+
+            base.DispatchDraw(canvas);
+        }
+    }
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
