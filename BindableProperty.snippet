@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- <?xml ?>の下は1行空けないと読み込めない -->
+<CodeSnippets xmlns="http://schema.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <!-- Titleのみ必須 -->
+            <Title>BindableProperty</Title>
+            <Author>Shuhei Nishizawa</Author>
+            <Description>Create BindableProperty</Description>
+            <!-- 呼び出すときの名前 -->
+            <Shortcut>binprop</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>type</ID>
+                    <ToolTip>Property type</ToolTip>
+                    <Default>int</Default>
+                </Literal>
+                <Literal>
+                    <ID>property</ID>
+                    <ToolTip>Property Name</ToolTip>
+                    <Default>MyProperty</Default>
+                </Literal>
+                <Literal>
+                    <ID>declaringType</ID>
+                    <ToolTip>Property Name</ToolTip>
+                    <Function>ClassName()</Function>
+                </Literal>
+                <Literal>
+                    <ID>defaultValue</ID>
+                    <ToolTip>Default value</ToolTip>
+                    <Default>MyDefaultValue</Default>
+                </Literal>
+                <Literal>
+                    <ID>bindingMode</ID>
+                    <ToolTip>Default binding mode</ToolTip>
+                    <Function>SimpleTypeName(global::Xamarin.Forms.BindingMode)</Function>
+                </Literal>
+            </Declarations>
+            <!-- 言語を指定.C#の場合は"CSharp" -->
+            <Code Language="CSharp">
+                <![CDATA[
+        public $type$ $property$
+        {
+            get { return ($type$)GetValue($property$Property); }
+            set { SetValue($property$Property, value); }
+        }
+        public static readonly BindableProperty $property$Property = BindableProperty.Create(
+               propertyName: nameof($property$),
+               returnType: typeof($type$),
+               declaringType: typeof($declaringType$),
+               defaultValue: $defaultValue$,
+               defaultBindingMode: $bindingMode$.OneWay,
+               propertyChanged: $property$PropertyChanged
+            );
+        private static void $property$PropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            $end$
+        }
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
