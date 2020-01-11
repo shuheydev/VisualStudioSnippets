@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- <?xml ?>の下は1行空けないと読み込めない -->
+<CodeSnippets xmlns="http://schema.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <!-- Titleのみ必須 -->
+            <Title>GradientRenderer Full</Title>
+            <Author>Shuhei Nishizawa</Author>
+            <Description>Create full version of gradient background color custom renderer.</Description>
+            <!-- 呼び出すときの名前 -->
+            <Shortcut>gradrenfull</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>controlName</ID>
+                    <ToolTip>Control name of render target</ToolTip>
+                    <Default>MyControl</Default>
+                </Literal>
+                <Literal>
+                    <ID>nameSpace</ID>
+                    <ToolTip>Namespace</ToolTip>
+                    <Default>MyNameSpace</Default>
+                </Literal>
+            </Declarations>
+            <!-- 言語を指定.C#の場合は"CSharp" -->
+            <Code Language="CSharp">
+                <![CDATA[
+using Android.Content;
+using Android.Graphics;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
+
+[assembly: ExportRenderer(typeof($controlName$), typeof($controlName$Renderer))]
+namespace $nameSpace$
+{
+    public class $controlName$Renderer : VisualElementRenderer<$controlName$>
+    {
+        public $controlName$Renderer(Context context) : base(context)
+        {
+        }
+
+        protected override void DispatchDraw(Canvas canvas)
+        {
+            var hd = Element.GradientHorizontalDirection;
+            var vd = Element.GradientVerticalDirection;
+            float width = Width * Element.GradientRatio;
+            float height = Height * Element.GradientRatio;
+            var color0 = Element.StartColor.ToAndroid();
+            var color1 = Element.EndColor.ToAndroid();
+
+            LinearGradient gradient = ComposeGradient(hd,
+                                                      vd,
+                                                      width,
+                                                      height,
+                                                      color0,
+                                                      color1);
+
+            Paint paint = new Paint
+            {
+                Dither = true,
+            };
+            paint.SetShader(gradient);
+            canvas.DrawPaint(paint);
+
+            base.DispatchDraw(canvas);
+        }
+
+        private LinearGradient ComposeGradient(GradientHorizontalDirection hd,
+                                               GradientVerticalDirection vd,
+                                               float width,
+                                               float height,
+                                               Android.Graphics.Color color0,
+                                               Android.Graphics.Color color1)
+        {
+            #region グラデーションの方向
+
+            //Switch式便利!
+            (float x0, float x1) = hd switch
+            {
+                GradientHorizontalDirection.LeftToRight => (0f, width),
+                GradientHorizontalDirection.RightToLeft => (width, 0f),
+                _ => (0f, 0f)
+            };
+            (float y0, float y1) = vd switch
+            {
+                GradientVerticalDirection.TopToBottom => (0f, height),
+                GradientVerticalDirection.BottomToTop => (height, 0f),
+                _ => (0f, 0f)
+            };
+            #endregion
+
+            //縦横双方がNothingだった場合は,StartColor一色で塗りつぶすようにする
+            if (hd == GradientHorizontalDirection.Nothing && vd == GradientVerticalDirection.Nothing)
+            {
+                color1 = color0;
+            }
+
+            //X軸始点
+            //Y軸始点
+            //X軸終点
+            //Y軸終点
+            //開始色
+            //終了色
+            //範囲外の描画方法
+            LinearGradient gradient = new LinearGradient(
+                        x0: x0,
+                        y0: y0,
+                        x1: x1,
+                        y1: y1,
+                        color0: color0,
+                        color1: color1,
+                        tile: Shader.TileMode.Clamp
+                );
+
+            return gradient;
+        }
+    }
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+
+        <CodeSnippet Format="1.0.0">
+        <Header>
+            <!-- Titleのみ必須 -->
+            <Title>GradientControl Full</Title>
+            <Author>Shuhei Nishizawa</Author>
+            <Description>Create full version of gradient background color custom control.</Description>
+            <!-- 呼び出すときの名前 -->
+            <Shortcut>gradcntfull</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+					<ID>controlName</ID>
+					<ToolTip>Control Name</ToolTip>
+					<Default>MyControl</Default>
+                </Literal>
+                <Literal>
+                    <ID>nameSpace</ID>
+                    <ToolTip>Namespace</ToolTip>
+                    <Default>MyNameSpace</Default>
+                </Literal>
+            </Declarations>
+            <!-- 言語を指定.C#の場合は"CSharp" -->
+            <Code Language="CSharp">
+                <![CDATA[
+using Xamarin.Forms;
+
+namespace $nameSpace$
+{
+    public class Gradient$controlName$ : $controlName$
+    {
+        public Color StartColor
+        {
+            get { return (Color)GetValue(StartColorProperty); }
+            set { SetValue(StartColorProperty, value); }
+        }
+        public static readonly BindableProperty StartColorProperty = BindableProperty.Create(
+               propertyName: nameof(StartColor),
+               returnType: typeof(Color),
+               declaringType: typeof(Gradient$controlName$),
+               defaultValue: Color.Transparent,
+               defaultBindingMode: BindingMode.OneWay,
+               propertyChanged: StartColorPropertyChanged
+            );
+        private static void StartColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+        }
+
+        public Color EndColor
+        {
+            get { return (Color)GetValue(EndColorProperty); }
+            set { SetValue(EndColorProperty, value); }
+        }
+        public static readonly BindableProperty EndColorProperty = BindableProperty.Create(
+                propertyName: nameof(EndColor),
+                returnType: typeof(Color),
+                declaringType: typeof(Gradient$controlName$),
+                defaultValue: Color.Transparent,
+                defaultBindingMode: BindingMode.OneWay,
+                propertyChanged: EndColorPropertyChanged
+            );
+        private static void EndColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+        }
+
+        public float GradientRatio
+        {
+            get { return (float)GetValue(GradientRatioProperty); }
+            set { SetValue(GradientRatioProperty, value); }
+        }
+        public static readonly BindableProperty GradientRatioProperty = BindableProperty.Create
+            (
+                propertyName: nameof(GradientRatio),
+                returnType: typeof(float),
+                declaringType: typeof(Gradient$controlName$),
+                defaultValue: 1.0f,
+                defaultBindingMode: BindingMode.OneWay,
+                propertyChanged: GradientRatioPropertyChanged
+            );
+        private static void GradientRatioPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+        }
+
+
+        public GradientHorizontalDirection GradientHorizontalDirection
+        {
+            get { return (GradientHorizontalDirection)GetValue(GradientHorizontalDirectionProperty); }
+            set { SetValue(GradientHorizontalDirectionProperty, value); }
+        }
+        public static readonly BindableProperty GradientHorizontalDirectionProperty = BindableProperty.Create(
+               propertyName: nameof(GradientHorizontalDirection),
+               returnType: typeof(GradientHorizontalDirection),
+               declaringType: typeof(Gradient$controlName$),
+               defaultValue: GradientHorizontalDirection.Nothing,
+               defaultBindingMode: BindingMode.OneWay,
+               propertyChanged: GradientHorizontalDirectionPropertyChanged
+            );
+        private static void GradientHorizontalDirectionPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+        }
+
+        public GradientVerticalDirection GradientVerticalDirection
+        {
+            get { return (GradientVerticalDirection)GetValue(GradientVerticalDirectionProperty); }
+            set { SetValue(GradientVerticalDirectionProperty, value); }
+        }
+        public static readonly BindableProperty GradientVerticalDirectionProperty = BindableProperty.Create(
+               propertyName: nameof(GradientVerticalDirection),
+               returnType: typeof(GradientVerticalDirection),
+               declaringType: typeof(Gradient$controlName$),
+               defaultValue: GradientVerticalDirection.Nothing,
+               defaultBindingMode: BindingMode.OneWay,
+               propertyChanged: GradientVerticalDirectionPropertyChanged
+            );
+        private static void GradientVerticalDirectionPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+        }
+    }
+
+    public enum GradientHorizontalDirection
+    {   
+        LeftToRight,
+        RightToLeft,
+        Nothing,
+    }
+
+    public enum GradientVerticalDirection
+    {
+        TopToBottom,
+        BottomToTop,
+        Nothing,
+    }
+}
+
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
