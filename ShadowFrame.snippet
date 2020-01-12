@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schema.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <!-- Titleのみ必須 -->
+            <Title>Drop shadow frame</Title>
+            <Author>Shuhei Nishizawa</Author>
+            <Description>Create drop shadow frame.</Description>
+            <!-- 呼び出すときの名前 -->
+            <Shortcut>shadowframe</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+					<ID>controlName</ID>
+					<ToolTip>Control Name</ToolTip>
+					<Default>ShadowFrame</Default>
+				</Literal>
+                <Literal>
+                    <ID>nameSpace</ID>
+                    <ToolTip>Namespace</ToolTip>
+                    <Default>MyNameSpace</Default>
+                </Literal>
+            </Declarations>
+            <!-- 言語を指定.C#の場合は"CSharp" -->
+            <Code Language="">
+                <![CDATA[
+using Xamarin.Forms;
+
+namespace $nameSpace$
+{
+    public class $controlName$ : Frame
+    {
+        public float Elevation
+        {
+            get { return (float)GetValue(ElevationProperty); }
+            set { SetValue(ElevationProperty, value); }
+        }
+        public static readonly BindableProperty ElevationProperty = BindableProperty.Create(
+               propertyName: nameof(Elevation),
+               returnType: typeof(float),
+               declaringType: typeof($controlName$),
+               defaultValue: 4.0f,
+               defaultBindingMode: BindingMode.OneWay,
+               propertyChanged: ElevationPropertyChanged
+            );
+        private static void ElevationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+        }
+    }
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <!-- Titleのみ必須 -->
+            <Title>Drop shadow frame renderer</Title>
+            <Author>Shuhei Nishizawa</Author>
+            <Description>Create drop shadow custom renderer</Description>
+            <!-- 呼び出すときの名前 -->
+            <Shortcut>shadowframeren</Shortcut>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+					<ID>controlName</ID>
+					<ToolTip>Target Control Name</ToolTip>
+					<Default>ShadowFrame</Default>
+				</Literal>
+                <Literal>
+                    <ID>nameSpace</ID>
+                    <ToolTip>Namespace</ToolTip>
+                    <Default>MyNameSpace</Default>
+                </Literal>
+            </Declarations>
+            <!-- 言語を指定.C#の場合は"CSharp" -->
+            <Code Language="CSharp">
+                <![CDATA[
+using Android.Content;
+using Android.Support.V4.View;
+using System.ComponentModel;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android;
+
+[assembly: ExportRenderer(typeof($controlName$), typeof($controlName$Renderer))]
+namespace $nameSpace$
+{
+    public class $controlName$Renderer : Xamarin.Forms.Platform.Android.AppCompat.FrameRenderer
+    {
+        public $controlName$Renderer(Context context) : base(context)
+        {
+        }
+
+        protected override void OnElementChanged(ElementChangedEventArgs<Frame> e)
+        {
+            base.OnElementChanged(e);
+            if (e.NewElement == null)
+            {
+                return;
+            }
+
+            UpdateElevation();
+        }
+
+        private void UpdateElevation()
+        {
+            var shadowFrame = ($controlName$)Element;
+
+            Control.StateListAnimator = new Android.Animation.StateListAnimator();
+
+            ViewCompat.SetElevation(this, shadowFrame.Elevation);
+            ViewCompat.SetElevation(Control, shadowFrame.Elevation);
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+            if (e.PropertyName == "Elevation")
+            {
+                UpdateElevation();
+            }
+        }
+    }
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
