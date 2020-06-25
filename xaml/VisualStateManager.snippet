@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippet Format="1.0.0" xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <Header>
+    <SnippetTypes>
+      <SnippetType>Expansion</SnippetType>
+    </SnippetTypes>
+    <Title>VisualStateManager</Title>
+    <Author>Shuhey</Author>
+    <Description>Snippet for a common Visual State Manager</Description>
+    <HelpUrl>
+    </HelpUrl>
+    <Shortcut>vsm</Shortcut>
+  </Header>
+  <Snippet>
+    <Declarations>
+      <Literal Editable="true">
+        <ID>GroupName</ID>
+        <ToolTip>The name of Visual State Group Name</ToolTip>
+        <Default>CommonStates</Default>
+        <Function>
+        </Function>
+      </Literal>
+      <Literal Editable="true">
+        <ID>State1</ID>
+        <ToolTip>The state name of Normal state</ToolTip>
+        <Default>Normal</Default>
+        <Function>
+        </Function>
+      </Literal>
+      <Literal Editable="true">
+        <ID>State2</ID>
+        <ToolTip>The state name of Selected</ToolTip>
+        <Default>Selected</Default>
+        <Function>
+        </Function>
+      </Literal>
+      <Literal Editable="true">
+        <ID>State3</ID>
+        <ToolTip>The state name of Disabled</ToolTip>
+        <Default>Disabled</Default>
+        <Function>
+        </Function>
+      </Literal>
+      <Literal Editable="true">
+        <ID>State4</ID>
+        <ToolTip>The state name of Focused</ToolTip>
+        <Default>Focused</Default>
+        <Function>
+        </Function>
+      </Literal>
+      <Literal Editable="true">
+        <ID>ContentPage3</ID>
+        <ToolTip>The ContentPage to display</ToolTip>
+        <Default>pages:ContentPage</Default>
+        <Function>
+        </Function>
+      </Literal>
+    </Declarations>
+    <Code Language="XAML">
+      <![CDATA[<Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="$GroupName$">
+                            <VisualState x:Name="$State1$">
+                                <VisualState.Setters>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="$State2$">
+                                <VisualState.Setters>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="$State3$">
+                                <VisualState.Setters>
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="$State4$">
+                                <VisualState.Setters>
+                                </VisualState.Setters>
+                            </VisualState>                            
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>]]>
+    </Code>
+  </Snippet>
+</CodeSnippet>
